@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta
 from .api import api
 
-RESULT_DIRECTORY = '__results__/crawling'
+# RESULT_DIRECTORY = '__results__/crawling'
 
 
 def preprocess_post(post):
@@ -32,12 +32,12 @@ def preprocess_post(post):
     post['created_time'] = kst.strftime(('%Y-%m-%d %H:%M:%S'))
 
 
-def crawling(pagename, since, until, fetch=True):
+def crawling(pagename, base_url, since, until, access_token, result_directory, fetch):
     results = []
-    filename = '%s/%s_%s_%s.json' % (RESULT_DIRECTORY, pagename, since, until)
+    filename = '%s/%s_%s_%s.json' % (result_directory, pagename, since, until)
 
     if fetch:
-        for posts in api.fb_fetch_posts(pagename, since, until):
+        for posts in api.fb_fetch_posts(pagename, base_url, since, until, access_token=access_token):
             for post in posts:
                 preprocess_post(post)
 
@@ -51,5 +51,5 @@ def crawling(pagename, since, until, fetch=True):
     return filename
 
 
-if os.path.exists(RESULT_DIRECTORY) is False:
-    os.makedirs(RESULT_DIRECTORY)
+# if os.path.exists(RESULT_DIRECTORY) is False:
+#     os.makedirs(RESULT_DIRECTORY)
